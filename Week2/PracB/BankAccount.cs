@@ -1,6 +1,6 @@
 using System.Buffers;
 
-class BankAccount
+public class BankAccount
 {
     
     public string Owner{get; set;}
@@ -32,11 +32,16 @@ class BankAccount
         Balance += (decimal)amount;
     }
 
-    
+
     public void Withdraw(decimal amount)
-    {
-        Balance -= amount;
-    }
+        {
+            if (amount > Balance)
+            {
+                throw new Exception("Balance should be positive.");
+            }
+
+            Balance -= amount;
+        }
 
 }
 
