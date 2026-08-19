@@ -22,3 +22,17 @@ Console.WriteLine();
 
 Console.WriteLine(contractor.GenerateReport());
 Console.WriteLine("Calculate Pay: " + contractor.CalculatePay());
+
+
+List<Employee> employees = new List<Employee>();
+
+employees.Add(employee);
+employees.Add(contractor);
+
+foreach (Employee x in employees)
+{
+    decimal pay = x.CalculatePay();
+    decimal tax = pay / (1 - Employee.TaxRate) * Employee.TaxRate;
+
+    Console.WriteLine($"{x.Name}: Pay ${pay}. Tax ${tax}.");
+}
