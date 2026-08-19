@@ -1,0 +1,7 @@
+What does polymorphism allow us to do that inheritance alone does not?
+
+    Polymorphism allows different classes to produce different outputs when a method is called, while inheritance allows a subclass to inherit the methods of its parent class.
+
+How is this similar or different from Python (or C++)’s behaviour?
+
+    This is similar to Python because different object can use same method name to implement different output.
