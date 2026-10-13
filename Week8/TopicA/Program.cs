@@ -1,8 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
+using ScottPlot;
 
 
 class Program
@@ -61,29 +62,87 @@ class Program
             scores.Remove(highest);
         }
 
+        // task3
         
-        
-        string aOutput = "";
+        string a = "";
 
         for (int i = 0; i < 100000; i++)
         {
-            aOutput += "z";
+            a += "z";
         }
 
         Console.WriteLine("String finished");
 
 
         
-        StringBuilder bOutput = new StringBuilder();
+        StringBuilder b = new StringBuilder();
 
         for (int i = 0; i < 100000; i++)
         {
-            bOutput.Append("z");
+            b.Append("z");
         }
 
         Console.WriteLine("StringBuilder finished");
     
 
+        int iterations = 20;
+
+        List<double> appendElapsedList = new List<double>();
+        List<double> builderElapsedList = new List<double>();
+
+        Stopwatch watch = new Stopwatch();
+
+        // Method 1: String
+        for (int pass = 1; pass <= iterations; pass++)
+        {
+            string aOutput = "";
+
+            watch.Restart();
+
+            for (int i = 0; i < pass * 10000; i++)
+            {
+                aOutput += "z";
+            }
+
+            watch.Stop();
+
+            appendElapsedList.Add(watch.Elapsed.TotalMilliseconds);
+        }
+
+        // Method 2: StringBuilder
+        for (int pass = 1; pass <= iterations; pass++)
+        {
+            StringBuilder bOutput = new StringBuilder();
+
+            watch.Restart();
+
+            for (int i = 0; i < pass * 10000; i++)
+            {
+                bOutput.Append("z");
+            }
+
+            watch.Stop();
+
+            builderElapsedList.Add(watch.Elapsed.TotalMilliseconds);
+        }
+
+        // Create Append graph
+        ScottPlot.Plot appendPlot = new();
+        appendPlot.Add.Bars(appendElapsedList.ToArray());
+        appendPlot.Title("String Append");
+        appendPlot.XLabel("Pass");
+        appendPlot.YLabel("Time (ms)");
+        appendPlot.SavePng("appendPlot.png", 800, 600);
+
+        // Create StringBuilder graph
+        ScottPlot.Plot buildPlot = new();
+        buildPlot.Add.Bars(builderElapsedList.ToArray());
+        buildPlot.Title("StringBuilder");
+        buildPlot.XLabel("Pass");
+        buildPlot.YLabel("Time (ms)");
+        buildPlot.SavePng("buildPlot.png", 800, 600);
+
+        Console.WriteLine("Graphs saved!");
 
     }
 }
