@@ -1,6 +1,8 @@
 ﻿
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 
 
 class Program
@@ -58,6 +60,30 @@ class Program
 
             scores.Remove(highest);
         }
+
+        
+        
+        string aOutput = "";
+
+        for (int i = 0; i < 100000; i++)
+        {
+            aOutput += "z";
+        }
+
+        Console.WriteLine("String finished");
+
+
+        
+        StringBuilder bOutput = new StringBuilder();
+
+        for (int i = 0; i < 100000; i++)
+        {
+            bOutput.Append("z");
+        }
+
+        Console.WriteLine("StringBuilder finished");
+    
+
 
     }
 }
