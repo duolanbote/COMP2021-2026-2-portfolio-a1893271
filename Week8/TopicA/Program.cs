@@ -62,28 +62,10 @@ class Program
             scores.Remove(highest);
         }
 
-        // task3
+        // task2
         
-        string a = "";
-
-        for (int i = 0; i < 100000; i++)
-        {
-            a += "z";
-        }
-
-        Console.WriteLine("String finished");
-
-
-        
-        StringBuilder b = new StringBuilder();
-
-        for (int i = 0; i < 100000; i++)
-        {
-            b.Append("z");
-        }
-
-        Console.WriteLine("StringBuilder finished");
     
+
 
         int iterations = 20;
 
