@@ -11,6 +11,7 @@ public class Graph
     }
 
     public void AddEdge(Node fromNode, Node toNode)
+    {
         if (!Nodes.Contains(fromNode))
         {
             Nodes.Add(fromNode);

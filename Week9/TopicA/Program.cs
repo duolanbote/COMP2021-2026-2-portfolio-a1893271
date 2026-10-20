@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 class Program
 {
@@ -26,6 +27,41 @@ class Program
         graph.AddEdge(E, H);
         graph.AddEdge(F, I);
 
-        Console.WriteLine(graph.ToString());
+        BFS(A, I);
+    }
+
+    static void BFS(Node start, Node target)
+    {
+        HashSet<Node> checkedNodes = new HashSet<Node>();
+        Queue<Node> queue = new Queue<Node>();
+
+        HashSet<Node> discovered = new HashSet<Node>();
+
+        queue.Enqueue(start);
+        discovered.Add(start);
+
+        while (queue.Count > 0)
+        {
+            Node current = queue.Dequeue();
+
+            checkedNodes.Add(current);
+
+            Console.WriteLine(current.Data);
+
+            if (current == target)
+            {
+                Console.WriteLine("Target found!");
+                break;
+            }
+
+            foreach (Node next in current.Edges)
+            {
+                if (!discovered.Contains(next))
+                {
+                    queue.Enqueue(next);
+                    discovered.Add(next);
+                }
+            }
+        }
     }
 }
