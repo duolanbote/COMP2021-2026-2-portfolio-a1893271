@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Topic1A",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/Week1/Topic1A/bin/Debug/net10.0/Topic1A.dll",
+      "cwd": "${workspaceFolder}/Week1/Topic1A",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Topic1B",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/Week1/Topic1B/bin/Debug/net10.0/Topic1B.dll",
+      "cwd": "${workspaceFolder}/Week1/Topic1B",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}

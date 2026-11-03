@@ -1,0 +1,5 @@
+Python vs C#
+
+1. Input is text, so I parse it: double.Parse, not float(input()).
+2. Every variable needs a type, e.g. double hours.
+3. Wrong types are compile errors, caught before running.
