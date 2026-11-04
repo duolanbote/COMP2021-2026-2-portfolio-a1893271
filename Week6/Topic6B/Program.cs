@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -90,8 +90,6 @@ class Program
         Console.WriteLine(owner);
     }
 
-
-    /
     var filteredQueue = accountsQueue
         .Where(x => x.Owner.Contains("e"))
         .OrderBy(x => x.Balance)

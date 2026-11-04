@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 
@@ -83,6 +83,15 @@ class Program
         {
             Console.WriteLine(account);
         }
+
+        Queue<BankAccount> sortedQueue = SortQueue(queue);
+
+        Console.WriteLine("Queue sorted by balance:");
+
+        foreach (BankAccount account in sortedQueue)
+        {
+            Console.WriteLine(account);
+        }
     }
 
     static Queue<BankAccount> StackToQueue(Stack<BankAccount> stack)
@@ -95,5 +104,47 @@ class Program
         }
 
         return queue;
+    }
+
+    static Queue<BankAccount> SortQueue(Queue<BankAccount> input)
+    {
+        Queue<BankAccount> sorted = new Queue<BankAccount>();
+
+        while (input.Count > 0)
+        {
+            Queue<BankAccount> temp = new Queue<BankAccount>();
+            BankAccount lowest = input.Peek();
+
+            while (input.Count > 0)
+            {
+                BankAccount current = input.Dequeue();
+
+                if (current.Balance < lowest.Balance)
+                {
+                    lowest = current;
+                }
+
+                temp.Enqueue(current);
+            }
+
+            bool removed = false;
+
+            while (temp.Count > 0)
+            {
+                BankAccount current = temp.Dequeue();
+
+                if (!removed && current == lowest)
+                {
+                    removed = true;
+                    continue;
+                }
+
+                input.Enqueue(current);
+            }
+
+            sorted.Enqueue(lowest);
+        }
+
+        return sorted;
     }
 }
