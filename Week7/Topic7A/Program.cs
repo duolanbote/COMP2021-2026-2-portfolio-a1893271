@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using ScottPlot;
 
-
-
-
-//notes : sortedset keep element sorted. and set means removing duplicates element
 class Program
 {
     static void Main()
     {
+        // Task 1
         SortedSet<int> scores = new SortedSet<int>();
 
         scores.Add(65);
@@ -25,7 +24,6 @@ class Program
         Console.WriteLine("Original scores:");
         DisplayScores(scores);
 
-        
         scores.Add(100);
 
         Console.WriteLine("After adding a new high score:");
@@ -36,6 +34,7 @@ class Program
         Console.WriteLine("After adding a duplicate score:");
         DisplayScores(scores);
 
+        // Task 2
         BankAccount account1 = new BankAccount("Alice", 1000);
         BankAccount account2 = new BankAccount("Bob", 2500);
         BankAccount account3 = new BankAccount("Charlie", 800);
@@ -47,18 +46,58 @@ class Program
         BankAccount account9 = new BankAccount("Ivy", 4000);
         BankAccount account10 = new BankAccount("Jack", 1200);
 
-        SortedSet<BankAccount> accounts = new SortedSet<BankAccount>();
+        // no comparer yet, this is the runtime error
+        SortedSet<BankAccount> noComparer = new SortedSet<BankAccount>();
 
-        accounts.Add(account1);
-        accounts.Add(account2);
-        accounts.Add(account3);
-        accounts.Add(account4);
-        accounts.Add(account5);
-        accounts.Add(account6);
-        accounts.Add(account7);
-        accounts.Add(account8);
-        accounts.Add(account9);
-        accounts.Add(account10);
+        try
+        {
+            noComparer.Add(account1);
+            noComparer.Add(account2);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Runtime error: " + ex.Message);
+        }
+
+        SortedSet<BankAccount> sortedAccounts = new SortedSet<BankAccount>(new BankComparer());
+
+        sortedAccounts.Add(account1);
+        sortedAccounts.Add(account2);
+        sortedAccounts.Add(account3);
+        sortedAccounts.Add(account4);
+        sortedAccounts.Add(account5);
+        sortedAccounts.Add(account6);
+        sortedAccounts.Add(account7);
+        sortedAccounts.Add(account8);
+        sortedAccounts.Add(account9);
+        sortedAccounts.Add(account10);
+
+        Console.WriteLine("Sorted accounts:");
+        DisplayAccounts(sortedAccounts);
+
+        sortedAccounts.Add(new BankAccount("Kate", 5000));
+
+        Console.WriteLine("After adding a new highest balance:");
+        DisplayAccounts(sortedAccounts);
+
+        sortedAccounts.Add(new BankAccount("Alice", 1000));
+
+        Console.WriteLine("After adding a duplicate account:");
+        DisplayAccounts(sortedAccounts);
+
+        // Task 3
+        double[] balances = sortedAccounts.Select(account => (double)account.Balance).ToArray();
+
+        ScottPlot.Plot plot = new();
+
+        plot.Add.Bars(balances);
+        plot.XLabel("Ranking");
+        plot.YLabel("Account Balance");
+        plot.Axes.Bottom.TickLabelStyle.FontSize = 20;
+        plot.Axes.Margins(bottom: 0, top: .2);
+        plot.SavePng("Topic7A-Task3.png", 800, 600);
+
+        Console.WriteLine("Saved Topic7A-Task3.png");
     }
 
     static void DisplayScores(SortedSet<int> scores)
@@ -85,8 +124,11 @@ class Program
         Console.WriteLine("Highest score: " + highest);
     }
 
-
-    //uncomplete, find a time to fix it
-
-    
+    static void DisplayAccounts(SortedSet<BankAccount> accounts)
+    {
+        foreach (BankAccount account in accounts)
+        {
+            Console.WriteLine(account);
+        }
+    }
 }

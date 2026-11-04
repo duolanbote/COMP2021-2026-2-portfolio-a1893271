@@ -1,25 +1,24 @@
-﻿
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Colletcions.Generic;
 using System.Text.Json;
 
 class Program
 {
     static void Main()
     {
-        string path = "MyTest.txt";
+        Directory.CreateDirectory("Attachments");
 
-        
-        if (!File.Exists(path))
+        string path = "Attachments/MyTest.txt";
+
+        // write the text file (no File.Exists check, so it always gets written)
+        using (StreamWriter sw = File.CreateText(path))
         {
-            using (StreamWriter sw = File.CreateText(path))
-            {
-                sw.WriteLine("Hello World");
-            }
+            sw.WriteLine("Hello World");
         }
 
-        // Read the file
+        // read it back with StreamReader
         using (StreamReader sr = File.OpenText(path))
         {
             string s;
@@ -30,54 +29,110 @@ class Program
             }
         }
 
-        
-        Player p1 = new Player("Alice", 100, 20, 10);
-        Player p2 = new Player("Bob", 80, 15, 5);
-        Player p3 = new Player("Charlie", 120, 25, 15);
-        Player p4 = new Player("David");
-        Player p5 = new Player("Emma");
+        // same thing with File.ReadAllText
+        Console.WriteLine(File.ReadAllText(path));
 
-        
-        List<Player> players = new List<Player>();
+        List<Player> players = new List<Player>
+        {
+            new Player("Alice", 100, 20, 10),
+            new Player("Bob", 80, 15, 5),
+            new Player("Charlie", 120, 25, 15),
+            new Player("David"),
+            new Player("Emma")
+        };
 
-        
-        players.Add(p1);
-        players.Add(p2);
-        players.Add(p3);
-        players.Add(p4);
-        players.Add(p5);
-
-        
         foreach (Player player in players)
         {
             Console.WriteLine(player);
         }
 
-        // Serialize the list
-        string json = JsonSerializer.Serialize(players);
+        string playersPath = "Attachments/players.json";
 
-        // Write JSON to a file
-        File.WriteAllText("players.json", json);
+        FileWriter(playersPath, players);
 
-        Console.WriteLine("Players saved!");
+        List<Player> loadedPlayers = FileReader<List<Player>>(playersPath);
 
-        // Read JSON from the file
-        string loadedJson = File.ReadAllText("players.json");
-
-        // Deserialize JSON into a list
-        List<Player>? loadedPlayers =
-            JsonSerializer.Deserialize<List<Player>>(loadedJson);
-
-        // Print loaded players
         Console.WriteLine("Loaded players:");
 
-        if (loadedPlayers != null)
+        foreach (Player player in loadedPlayers)
         {
-            foreach (Player player in loadedPlayers)
-            {
-                Console.WriteLine(player);
-            }
+            Console.WriteLine(player);
         }
 
+        LinkedList<Player> playerList = new LinkedList<Player>();
+
+        foreach (Player player in players)
+        {
+            playerList.AddLast(player);
+        }
+
+        string linkedPath = "Attachments/playersLinkedList.json";
+
+        FileWriter(linkedPath, playerList);
+
+        LinkedList<Player> loadedList = FileReader<LinkedList<Player>>(linkedPath);
+
+        ShowMemory("LinkedList with " + loadedList.Count + " players");
+
+        BenchmarkList();
+        BenchmarkLinkedList();
+    }
+
+    public static void FileWriter<T>(string path, T objectToWrite) where T : class
+    {
+        string json = JsonSerializer.Serialize(objectToWrite);
+
+        File.WriteAllText(path, json);
+    }
+
+    public static T FileReader<T>(string path) where T : class
+    {
+        string json = File.ReadAllText(path);
+
+        return JsonSerializer.Deserialize<T>(json)!;
+    }
+
+    static void ShowMemory(string label)
+    {
+        GC.Collect();
+
+        long heap = GC.GetGCMemoryInfo().HeapSizeBytes;
+        long peak = Process.GetCurrentProcess().PeakWorkingSet64;
+
+        Console.WriteLine(label);
+        Console.WriteLine("HeapSizeBytes: " + heap);
+        Console.WriteLine("PeakWorkingSet64: " + peak);
+    }
+
+    static void BenchmarkList()
+    {
+        List<Player> list = new List<Player>();
+
+        for (int i = 0; i < 10_000; i++)
+        {
+            list.Add(new Player("Player" + i));
+        }
+
+        FileWriter("Attachments/list10000.json", list);
+
+        List<Player> loaded = FileReader<List<Player>>("Attachments/list10000.json");
+
+        ShowMemory("List with " + loaded.Count + " players");
+    }
+
+    static void BenchmarkLinkedList()
+    {
+        LinkedList<Player> list = new LinkedList<Player>();
+
+        for (int i = 0; i < 10_000; i++)
+        {
+            list.AddLast(new Player("Player" + i));
+        }
+
+        FileWriter("Attachments/linkedList10000.json", list);
+
+        LinkedList<Player> loaded = FileReader<LinkedList<Player>>("Attachments/linkedList10000.json");
+
+        ShowMemory("LinkedList with " + loaded.Count + " players");
     }
 }
