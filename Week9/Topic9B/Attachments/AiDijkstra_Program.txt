@@ -1,0 +1,57 @@
+using System;
+using System.Linq;
+
+namespace AiDijkstra;
+
+public static class Program
+{
+    public static void Main()
+    {
+        var graph = BuildHorseGraph();
+
+        var path = graph.FindShortestPath("Start", "End", out var distance);
+
+        Console.WriteLine($"Nodes: {graph.Nodes.Count()}");
+        Console.WriteLine($"Optimal route: {string.Join(" -> ", path)}");
+        Console.WriteLine($"Total cost: {distance}");
+    }
+
+    private static WeightedGraph BuildHorseGraph()
+    {
+        var graph = new WeightedGraph();
+
+        var edges = new (string From, string To, int Weight)[]
+        {
+            ("Start", "A", 1),
+            ("Start", "B (BEES)", 5),
+            ("Start", "D (BEES)", 5),
+            ("A", "C", 1),
+            ("B (BEES)", "E (BEES)", 5),
+            ("D (BEES)", "C", 5),
+            ("D (BEES)", "E (BEES)", 5),
+            ("D (BEES)", "G", 5),
+            ("E (BEES)", "H", 5),
+            ("C", "F", 1),
+            ("G", "F", 1),
+            ("G", "H", 1),
+            ("G", "J (BEES)", 1),
+            ("F", "I (BEES)", 5),
+            ("H", "K", 1),
+            ("J (BEES)", "I (BEES)", 5),
+            ("J (BEES)", "K", 5),
+            ("J (BEES)", "M", 5),
+            ("I (BEES)", "L", 5),
+            ("K", "N", 1),
+            ("M", "L", 1),
+            ("M", "N", 1),
+            ("L", "End", 1),
+        };
+
+        foreach (var (from, to, weight) in edges)
+        {
+            graph.AddUndirectedEdge(from, to, weight);
+        }
+
+        return graph;
+    }
+}
